@@ -31,14 +31,14 @@ export class Chart4Component implements OnInit {
   }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    d3.select('.chart-bar').select('g').remove();
+    d3.select('#graphic4').select('g').remove();
     this.renderChart(this.data_begin);
   }
   ngOnInit() {
     this.renderChart(this.data_begin);
   }
   renderChart(data_input) {
-    const svg = d3.select('.chart-bar'),
+    const svg = d3.select('#graphic4'),
       margin = {top: 20, right: 20, bottom: 30, left: 75},
       width = + parseInt(d3.select('.box').style('width')) - margin.left - margin.right ,
       height = +svg.attr('height') - margin.top - margin.bottom,
@@ -70,7 +70,7 @@ export class Chart4Component implements OnInit {
     this.data_now['columns'] = ['month', '平均', '自社'];
     // key =["Trắng", "Xanh"]
     const keys = this.data_now['columns'].slice(1);
-    //  ["CA", "TX", "NY", "FL", "IL", "PA"] data.map(function(d) { return d.month; })
+    //  ["CA", "TX", "NY", "FL", "IL", "PA"] data.map(function(d) { return d.month; })
     x0.domain(this.data_now.map(function (d) {
       return d.month;
     }));
@@ -192,7 +192,7 @@ export class Chart4Component implements OnInit {
       });
   }
   btnPreview() {
-    d3.select('.chart-bar').select('g').remove();
+    d3.select('#graphic4').select('g').remove();
     if (this.index > 0) {
       this.index--;
     }
@@ -200,7 +200,7 @@ export class Chart4Component implements OnInit {
   }
   btnNext() {
     if (this.data_begin.length !== this.index_data + 1) {
-      d3.select('.chart-bar').select('g').remove();
+      d3.select('#graphic4').select('g').remove();
       this.index++;
       this.renderChart(this.data_begin);
     }

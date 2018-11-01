@@ -1,4 +1,13 @@
 <div class="container-fluid">
+  <div class="col-sm-12">
+    <select class='cssSelect' (change)="selectOption($event.target.value)">
+      <option>chart1</option>
+      <option>chart2</option>
+      <option>chart3</option>
+      <option>graphic-4</option>
+    </select>
+    <button id="print" (click)="print()">Print</button>
+  </div>
   <div class="row">
     <div class="col-sm-6">
       <app-chart1></app-chart1>
@@ -16,4 +25,3 @@
     </div>
   </div>
 </div>
-

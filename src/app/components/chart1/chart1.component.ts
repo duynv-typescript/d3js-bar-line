@@ -73,31 +73,31 @@ export class Chart1Component implements OnInit {
 
     ////////////Render x line fuzzy//////////////
     svg.append('line')
-      .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 60)
       .attr('y1', 83)
       .attr('y2', 83);
     svg.append('line')
-      .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 60)
       .attr('y1', 155)
       .attr('y2', 155);
     svg.append('line')
-      .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 60)
       .attr('y1', 229)
       .attr('y2', 229);
     svg.append('line')
-      .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 60)
       .attr('y1', 307)
       .attr('y2', 307);
     svg.append('line')
-      .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 60)
       .attr('y1', 377)
@@ -141,30 +141,45 @@ export class Chart1Component implements OnInit {
     let colorText = '';
     let text = '';
     if (check === 'red') {
-      colorLine = 'lineRed';
-      colorText = 'txtRed';
-      text = '平均';
+      const valueline = d3.line()
+        .x(function(d) { return (d.x); })
+        .y(function(d) { return (d.y); });
+      svg.append('path')
+        .data([data])
+        .attr('d', valueline)
+        .attr('style', 'fill: none; stroke: red;stroke-width: 1.5px;');
+      svg.append('text')
+        .attr('style', 'fill:red;font-weight: bold;')
+        .attr('transform', 'translate(' + (w - 70) + ', ' + h + ')')
+        .attr('text-anchor', 'middle')
+        .text('平均');
     } else if (check === 'blue') {
-      colorLine = 'lineBlue';
-      colorText = 'txtBlue';
-      text = '自社';
+      const valueline = d3.line()
+        .x(function(d) { return (d.x); })
+        .y(function(d) { return (d.y); });
+      svg.append('path')
+        .data([data])
+        .attr('d', valueline)
+        .attr('style', 'fill: none; stroke: blue;stroke-width: 1.5px;');
+      svg.append('text')
+        .attr('style', 'fill:blue;font-weight: bold;')
+        .attr('transform', 'translate(' + (w - 70) + ', ' + h + ')')
+        .attr('text-anchor', 'middle')
+        .text('自社');
     } else {
-      colorLine = 'lineGray';
-      colorText = 'txtGray';
-      text = 'TOP';
+      const valueline = d3.line()
+        .x(function(d) { return (d.x); })
+        .y(function(d) { return (d.y); });
+      svg.append('path')
+        .data([data])
+        .attr('d', valueline)
+        .attr('style', 'fill: none; stroke: gray;stroke-width: 1.5px;');
+      svg.append('text')
+        .attr('style', 'fill:gray;font-weight: bold;')
+        .attr('transform', 'translate(' + (w - 70) + ', ' + h + ')')
+        .attr('text-anchor', 'middle')
+        .text('TOP');
     }
-    const valueline = d3.line()
-      .x(function(d) { return (d.x); })
-      .y(function(d) { return (d.y); });
-    svg.append('path')
-      .data([data])
-      .attr('class', colorLine)
-      .attr('d', valueline);
-    svg.append('text')
-      .attr('class', colorText)
-      .attr('transform', 'translate(' + (w - 70) + ', ' + h + ')')
-      .attr('text-anchor', 'middle')
-      .text(text);
   }
 
   toolTip(svg, div, data, color) {

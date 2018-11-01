@@ -14,3 +14,6 @@ button > span{
 button#btn-next {
   right: 80px;
 }
+#print {
+  left: 100px;
+}
