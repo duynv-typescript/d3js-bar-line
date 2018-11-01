@@ -31,7 +31,7 @@ export class AppComponent {
        '    visibility: hidden;' +
        '"');
     }
-    console.log(html)
+    console.log(prtContent.innerHTML);
     WinPrint.document.write(html);
     WinPrint.document.close();
     WinPrint.focus();

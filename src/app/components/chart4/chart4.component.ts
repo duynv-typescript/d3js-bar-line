@@ -43,7 +43,6 @@ export class Chart4Component implements OnInit {
   ];
   constructor() {
   }
-
   ngOnInit() {
     this.renderChart(this.data_begin);
   }
@@ -101,6 +100,9 @@ export class Chart4Component implements OnInit {
 
     g.append('g')
       .attr('class', 'axis')
+      .style('color', '#808080')
+      .style('stroke-width', 1.5)
+      .style('stroke-opacity', 0.4)
       .call(yAxis)
       .append('text')
       .attr('transform', 'translate(' + 0 + ', 0)')
