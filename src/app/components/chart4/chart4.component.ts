@@ -134,7 +134,7 @@ export class Chart4Component implements OnInit {
       .attr('transform', 'translate(0,' + height + ')')
 
       .call(d3.axisBottom(x0).tickFormat((d , i) => {
-        return (d + '回' + (((d == 1)) ? this.data_now[i]['year'] : ''));
+        return (d + '回' + (((d === 1)) ? this.data_now[i]['year'] : ''));
       }));
 
 
