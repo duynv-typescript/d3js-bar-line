@@ -47,6 +47,15 @@ export class Chart4Component implements OnInit {
     this.renderChart(this.data_begin);
   }
   renderChart(data_input) {
+    const data = data_input;
+    let i = 0;
+    this.data_now = data.filter((currElement, index) => {
+      if (index >= this.index && i <= 11 ) {
+        i++;
+        this.index_data = index;
+        return currElement;
+      }
+    });
     const svg = d3.select('#graphic4'),
       margin = {top: 20, right: 20, bottom: 30, left: 75},
       width = + parseInt(d3.select('.box').style('width')) - margin.left - margin.right ,
@@ -54,6 +63,7 @@ export class Chart4Component implements OnInit {
       g = svg.append('g').attr('transform', 'translate(' + margin.right + ',' + margin.top + ')');
     svg.attr('width', parseInt(d3.select('.box').style('width')));
     const x0 = d3.scaleBand()
+      .domain(d3.range(this.data_now.length))
     // chiều rộng các của biểu đồ
       .rangeRound([0, width])
       // margin giữa các côt chính
@@ -67,15 +77,6 @@ export class Chart4Component implements OnInit {
     const z = d3.scaleOrdinal()
     // màu của 2 cột
       .range(['red', 'blue']);
-    const data = data_input;
-    let i = 0;
-    this.data_now = data.filter((currElement, index) => {
-      if (index >= this.index && i <= 11 ) {
-        i++;
-        this.index_data = index;
-        return currElement;
-      }
-    });
     this.data_now['columns'] = ['month', '平均', '自社'];
     // key =["Trắng", "Xanh"]
     const keys = this.data_now['columns'].slice(1);
@@ -165,43 +166,80 @@ export class Chart4Component implements OnInit {
       .call(d3.axisBottom(x0).tickFormat((d , i) => {
         return (d + '回' + (((d == 1)) ? this.data_now[i]['year'] : ''));
       }));
-
-
-
-    const legend_colum = g.append('g')
-      .attr('font-family', 'sans-serif')
-      .attr('font-size', 10)
-      .attr('text-anchor', 'end')
-      .attr('font-weight', 'bold')
-      .selectAll('g')
-      .data(keys.slice())
-      .enter().append('g')
-      .attr('transform', function (d, i) {
-        const max = d3.max(dataFirst, function (d) {
-          return d3.max(keys, function (key) {
-            return d[key];
-          });
-        });
-        const a = (parseInt(d3.select('.box').style('width') ) - 200) / 44;
-        return 'translate(' + (a + a / 2 + a * (i + i))  + ',' + ((1 - dataFirst[0][keys[i]] / max) * 320 - 100 * ((1 - dataFirst[0][keys[i]] / max))) + ')';
-      });
-    legend_colum.append('text')
-      .attr('font-family', 'sans-serif')
-      .attr('font-size', 10)
-      .attr('text-anchor', 'end')
-      .attr('font-weight', 'bold')
-      .attr('x', 0)
-      .attr('y', 10.5)
-      .attr('dy', '0.32em')
-      .style('fill', function (d, i) {
-        if (i === 0) {
-          return 'red';
-        }
-        return 'blue';
+console.log([this.data_now[0]])
+    g.append('g').selectAll('text')
+      .data([this.data_now[0]])
+      .enter()
+      .append('text')
+      .text(function(d) {
+        return '自社';
       })
-      .text(function (d) {
-        return d;
-      });
+      .attr('text-anchor', 'middle')
+      .attr('x', function(d, i) {
+        return  x0(i + 1) + 3 * x0.bandwidth() / 4;
+      })
+      .attr('y', function(d) {
+        return  y((d['自社'] > (d['平均'])) ? d['自社'] : d['平均'])  - 14  ;
+      })
+      .attr('font-family', 'sans-serif')
+      .attr('font-size', '11px')
+      .attr('fill', 'blue');
+
+    g.append('g').selectAll('text')
+      .data([this.data_now[0]])
+      .enter()
+      .append('text')
+      .text(function(d) {
+        return '平均';
+      })
+      .attr('text-anchor', 'middle')
+      .attr('x', function(d, i) {
+        return  x0(i + 1) + x0.bandwidth() / 4;
+      })
+      .attr('y', function(d) {
+        return  y((d['自社'] > (d['平均'])) ? d['自社'] : d['平均'])  - 14  ;
+      })
+      .attr('font-family' , 'sans-serif' )
+      .attr('font-size' , '11px' )
+      .attr('fill' , 'red' );
+
+
+
+
+    // const legend_colum = g.append('g')
+    //   .attr('font-family', 'sans-serif')
+    //   .attr('font-size', 10)
+    //   .attr('text-anchor', 'end')
+    //   .attr('font-weight', 'bold')
+    //   .selectAll('g')
+    //   .data(keys.slice())
+    //   .enter().append('g')
+    //   .attr('transform', function (d, i) {
+    //     const max = d3.max(dataFirst, function (d) {
+    //       return d3.max(keys, function (key) {
+    //         return d[key];
+    //       });
+    //     });
+    //     const a = (parseInt(d3.select('.box').style('width') ) - 200) / 44;
+    //     return 'translate(' + (a + a / 2 + a * (i + i))  + ',' + ((1 - dataFirst[0][keys[i]] / max) * 320 - 100 * ((1 - dataFirst[0][keys[i]] / max))) + ')';
+    //   });
+    // legend_colum.append('text')
+    //   .attr('font-family', 'sans-serif')
+    //   .attr('font-size', 10)
+    //   .attr('text-anchor', 'end')
+    //   .attr('font-weight', 'bold')
+    //   .attr('x', 0)
+    //   .attr('y', 10.5)
+    //   .attr('dy', '0.32em')
+    //   .style('fill', function (d, i) {
+    //     if (i === 0) {
+    //       return 'red';
+    //     }
+    //     return 'blue';
+    //   })
+    //   .text(function (d) {
+    //     return d;
+    //   });
   }
   btnPreview() {
     d3.select('#graphic4').select('g').remove();
