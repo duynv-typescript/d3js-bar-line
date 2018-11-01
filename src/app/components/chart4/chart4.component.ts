@@ -94,6 +94,23 @@ export class Chart4Component implements OnInit {
     const dataFirst = this.data_now;
     const tooltip = d3.select('body').append('div').attr('class', 'tooltip');
     // x0(d.month) : dịch chuyển các cột với trục ox giá trị tăng dần
+    const yAxis = d3.axisRight(y)
+      .tickFormat(d =>  d + '%')
+      .ticks(3, 's')
+      .tickSize(width);
+
+    g.append('g')
+      .attr('class', 'axis')
+      .call(yAxis)
+      .append('text')
+      .attr('transform', 'translate(' + 0 + ', 0)')
+      .attr('x', parseInt(d3.select('.box').style('width')) - 30 - margin.left - margin.right)
+      .attr('y', y(y.ticks().pop()) + 0.5 - 10)
+      .attr('dy', '0.32em')
+      .attr('fill', '#000')
+      .attr('font-weight', 'bold')
+      .attr('text-anchor', 'start')
+      .text('Giá trị');
     g.append('g')
       .selectAll('g')
       .data(this.data_now)
@@ -148,23 +165,7 @@ export class Chart4Component implements OnInit {
       }));
 
 
-    const yAxis = d3.axisRight(y)
-      .tickFormat(d =>  d + '%')
-      .ticks(3, 's')
-      .tickSize(width);
 
-    g.append('g')
-      .attr('class', 'axis')
-      .call(yAxis)
-      .append('text')
-      .attr('transform', 'translate(' + 0 + ', 0)')
-      .attr('x', parseInt(d3.select('.box').style('width')) - 30 - margin.left - margin.right)
-      .attr('y', y(y.ticks().pop()) + 0.5 - 10)
-      .attr('dy', '0.32em')
-      .attr('fill', '#000')
-      .attr('font-weight', 'bold')
-      .attr('text-anchor', 'start')
-      .text('Giá trị');
 
     const legend_colum = g.append('g')
       .attr('font-family', 'sans-serif')
