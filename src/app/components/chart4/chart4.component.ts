@@ -15,7 +15,7 @@ export class Chart4Component implements OnInit {
   // data change
   data_now: any= [];
   data_begin= [
-    //{month: '1', 平均: '10', 自社: '30', year: '2018'},
+    {month: '1', 平均: '10', 自社: '30', year: '2018'},
     {month: '2', 平均: '40', 自社: '50', year: '2018'},
     {month: '3', 平均: '20', 自社: '60', year: '2018'},
     {month: '4', 平均: '10', 自社: '10', year: '2018'},
@@ -164,7 +164,7 @@ export class Chart4Component implements OnInit {
       .attr('transform', 'translate(0,' + height + ')')
 
       .call(d3.axisBottom(x0).tickFormat((d , i) => {
-        return (d + '回' + (((d == 1)) ? this.data_now[i]['year'] : ''));
+        return (d + '回' + (((i == 0 || i == 11)) ? this.data_now[i]['year'] : ''));
       }));
     // label note
     //console.log(this.data_now)
@@ -204,8 +204,6 @@ export class Chart4Component implements OnInit {
       .attr('font-family' , 'sans-serif' )
       .attr('font-size' , '11px' )
       .attr('fill' , 'red' );
-
-
   }
   btnPreview() {
     d3.select('#graphic4').select('g').remove();

@@ -28,7 +28,7 @@ export class AppComponent {
     let html = prtContent.innerHTML;
     for (let i = 0 ; i <= el.length ; i++) {
      html = html.replace('btn-change', '" style="' +
-       '    visibility: hidden;' +
+       '    display: none;' +
        '"');
     }
     console.log(prtContent.innerHTML);

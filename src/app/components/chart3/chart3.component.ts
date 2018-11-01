@@ -17,7 +17,7 @@ export class Chart3Component implements OnInit {
     this.w = elmnt.offsetWidth;
     this.h = 450;
     this.dataY = [0, 250, 500, 750, 1000];
-    this.dataX = [8, 9, 10, 11, 12];
+    this.dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
     this.svg = d3.select('#graphic3')
       .append('svg')
       .attr('width', this.w)
@@ -57,13 +57,13 @@ export class Chart3Component implements OnInit {
       .call(yAxis);
 
     xScale = d3.scaleLinear()
-      .domain([d3.min(dataX), d3.max(dataX)])
+      .domain([d3.min(dataX.val), d3.max(dataX.val)])
       .range([40, w - 100]);
 
     xAxis = d3.axisBottom()
       .scale(xScale)
       .ticks(5)
-      .tickFormat(d => d + '内');
+      .tickFormat((d,i) => {console.log(i); return  (d + '内' + ((i === 0 || i === 5) ? dataX['year'][i] : '')); });
 
     svg.append('g')
       .attr('class', 'gX  ')
@@ -74,30 +74,35 @@ export class Chart3Component implements OnInit {
     ////////////Render x line fuzzy//////////////
     svg.append('line')
       .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 80)
       .attr('y1', 83)
       .attr('y2', 83);
     svg.append('line')
       .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 80)
       .attr('y1', 155)
       .attr('y2', 155);
     svg.append('line')
       .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 80)
       .attr('y1', 229)
       .attr('y2', 229);
     svg.append('line')
       .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 80)
       .attr('y1', 307)
       .attr('y2', 307);
     svg.append('line')
       .attr('class', 'line')
+      .attr('style', 'fill: none;stroke: #eaeaea;stroke-width: 1.5px;')
       .attr('x1', 0)
       .attr('x2', w - 80)
       .attr('y1', 377)
@@ -218,7 +223,7 @@ export class Chart3Component implements OnInit {
   }
   btnPreview3() {
     d3.selectAll('#graphic3 svg > *').remove();
-    const dataX = [1, 2, 3, 4, 5];
+    const dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
     const yRed = this.getRandomSetText(230, 280); // Set position text
     const yBlue = this.getRandomSetText(160, 180); // Set position text
     const yGray = this.getRandomSetText(90, 140); // Set position text
@@ -244,7 +249,7 @@ export class Chart3Component implements OnInit {
   }
   btnNext3() {
     d3.selectAll('#graphic3 svg > *').remove();
-    const dataX = [6, 7, 8, 9, 10];
+    const dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
     const yRed = this.getRandomSetText(230, 280); // Set position text
     const yBlue = this.getRandomSetText(160, 180); // Set position text
     const yGray = this.getRandomSetText(90, 140); // Set position text
