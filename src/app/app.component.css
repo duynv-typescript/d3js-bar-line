@@ -6,3 +6,8 @@
 #print {
   height: 30px;
 }
+@media print {
+  .btn-change{
+    visibility: hidden;
+  }
+}

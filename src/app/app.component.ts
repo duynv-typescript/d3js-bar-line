@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public idSelect = 'graphic';
+  public idSelect = 'all';
   title = 'app';
   selectOption(value) {
     if (value === 'chart1') {
@@ -15,15 +15,24 @@ export class AppComponent {
       this.idSelect = 'graphic2';
     } else if (value === 'chart3') {
       this.idSelect = 'graphic3';
-    } else {
+    } else if (value === 'all') {
+      this.idSelect = 'all';
+    }  else {
       this.idSelect = 'graphic-4';
     }
   }
   print() {
-    console.log(this.idSelect);
     const  prtContent = document.getElementById(this.idSelect);
+    const el = document.querySelectorAll('.btn-change');
     const WinPrint = window.open('', '', 'left=0,top=0,width=1200,height=900,toolbar=0,scrollbars=0,status=0');
-    WinPrint.document.write(prtContent.innerHTML);
+    let html = prtContent.innerHTML;
+    for (let i = 0 ; i <= el.length ; i++) {
+     html = html.replace('btn-change', '" style="' +
+       '    visibility: hidden;' +
+       '"');
+    }
+    console.log(html)
+    WinPrint.document.write(html);
     WinPrint.document.close();
     WinPrint.focus();
     WinPrint.print();
