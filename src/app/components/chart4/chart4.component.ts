@@ -166,7 +166,6 @@ export class Chart4Component implements OnInit {
 
 
 
-
     const legend_colum = g.append('g')
       .attr('font-family', 'sans-serif')
       .attr('font-size', 10)

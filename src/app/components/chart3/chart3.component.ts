@@ -159,10 +159,12 @@ export class Chart3Component implements OnInit {
     svg.append('path')
       .data([data])
       .attr('class', colorLine)
-      .attr('d', valueline);
+      .attr('d', valueline)
+      .attr('style', 'fill: none; stroke: ' + check + ';stroke-width: 1.5px;');
     svg.append('text')
       .attr('class', colorText)
       .attr('transform', 'translate(' + (w - 70) + ', ' + h + ')')
+      .attr('style', 'fill:' + check + ';font-weight: bold;')
       .attr('text-anchor', 'middle')
       .text(text);
   }
