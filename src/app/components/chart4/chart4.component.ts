@@ -10,7 +10,9 @@ enableProdMode();
 export class Chart4Component implements OnInit {
 
   index= 0;
+  // index data now
   index_data= 0;
+  // data change
   data_now: any= [];
   data_begin= [
     {month: '1', 平均: '10', 自社: '30', year: '2018'},
@@ -26,14 +28,22 @@ export class Chart4Component implements OnInit {
     {month: '11', 平均: '50', 自社: '10', year: '2018'},
     {month: '12', 平均: '40', 自社: '90', year: '2018'},
     {month: '1', 平均: '30', 自社: '70', year: '2019'},
+    {month: '2', 平均: '40', 自社: '50', year: '2019'},
+    {month: '3', 平均: '20', 自社: '60', year: '2019'},
+    {month: '4', 平均: '10', 自社: '10', year: '2019'},
+    {month: '5', 平均: '50', 自社: '75', year: '2019'},
+    {month: '6', 平均: '70', 自社: '40', year: '2019'},
+    {month: '7', 平均: '40', 自社: '10', year: '2019'},
+    {month: '8', 平均: '50', 自社: '10', year: '2019'},
+    {month: '9', 平均: '75', 自社: '40', year: '2019'},
+    {month: '10', 平均: '10', 自社: '50', year: '2019'},
+    {month: '11', 平均: '50', 自社: '10', year: '2019'},
+    {month: '12', 平均: '40', 自社: '90', year: '2019'},
+    {month: '1', 平均: '40', 自社: '90', year: '2020'},
   ];
   constructor() {
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    d3.select('#graphic4').select('g').remove();
-    this.renderChart(this.data_begin);
-  }
+
   ngOnInit() {
     this.renderChart(this.data_begin);
   }
@@ -61,7 +71,7 @@ export class Chart4Component implements OnInit {
     const data = data_input;
     let i = 0;
     this.data_now = data.filter((currElement, index) => {
-      if (index >= this.index && i <= 11 ){
+      if (index >= this.index && i <= 11 ) {
         i++;
         this.index_data = index;
         return currElement;
@@ -134,7 +144,7 @@ export class Chart4Component implements OnInit {
       .attr('transform', 'translate(0,' + height + ')')
 
       .call(d3.axisBottom(x0).tickFormat((d , i) => {
-        return (d + '回' + (((d === 1)) ? this.data_now[i]['year'] : ''));
+        return (d + '回' + (((d == 1)) ? this.data_now[i]['year'] : ''));
       }));
 
 
@@ -204,6 +214,11 @@ export class Chart4Component implements OnInit {
       this.index++;
       this.renderChart(this.data_begin);
     }
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    d3.select('#graphic4').select('g').remove();
+    this.renderChart(this.data_begin);
   }
 
 }
