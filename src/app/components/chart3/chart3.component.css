@@ -14,3 +14,7 @@ button > span{
 button#btn-next3 {
   right: 80px;
 }
+.btn-change{
+  display: flex;
+  justify-content: center;
+}

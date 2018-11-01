@@ -15,3 +15,11 @@ button > span{
 button#btn-next2 {
   right: 80px;
 }
+.btn-change{
+  display: flex;
+  justify-content: center;
+}
+.btn-change{
+  display: flex;
+  justify-content: center;
+}
