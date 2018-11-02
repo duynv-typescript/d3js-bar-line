@@ -80,6 +80,7 @@ export class Chart4Component implements OnInit {
     this.data_now['columns'] = ['month', '平均', '自社'];
     // key =["Trắng", "Xanh"]
     const keys = this.data_now['columns'].slice(1);
+
     //  ["CA", "TX", "NY", "FL", "IL", "PA"] data.map(function(d) { return d.month; })
     x0.domain(this.data_now.map(function (d) {
       return d.month;

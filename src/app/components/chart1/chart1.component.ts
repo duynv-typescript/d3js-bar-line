@@ -80,7 +80,6 @@ export class Chart1Component implements OnInit {
     if (tickText.select('tspan.tick-year').empty()) {
       tickText.append('tspan').data(dataX.val)
         .text((d,i) => {
-          console.log(i)
           return (((i == 0 || i == dataX.val.length - 1)) ? dataX.year[i] : '');
         }).attr('class', 'tick-year')
         .attr('dy', '1em')
@@ -198,7 +197,7 @@ export class Chart1Component implements OnInit {
   }
 
   toolTip(svg, div, data, color) {
-    svg.selectAll('dot')
+    svg.selectAll('#graphic-box dot')
       .data(data)
       .enter().append('circle')
       .attr('r', 3)
@@ -220,7 +219,7 @@ export class Chart1Component implements OnInit {
         const value = (300 - (d.y - 83)) / 300 * 40;
         const number = value.toFixed(2);
         div	.html('2018事' + (d.month) + '者 12 事' + '<br/>'  + number + '%')
-        d3.select('.mouse-line')
+        d3.select('#graphic-box .mouse-line')
           .attr('d', function() {
             let d = 'M' + mouse[0] + ',' + 377;
             d += ' ' + mouse[0] + ',' + 83;

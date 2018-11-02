@@ -31,7 +31,6 @@ export class AppComponent {
        '    display: none;' +
        '"');
     }
-    console.log(prtContent.innerHTML);
     WinPrint.document.write(html);
     WinPrint.document.close();
     WinPrint.focus();

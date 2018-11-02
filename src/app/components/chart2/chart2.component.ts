@@ -50,7 +50,6 @@ export class Chart2Component implements OnInit {
       .domain([d3.min(dataY), d3.max(dataY)])
       .range([h - 50, 100]);
 
-    console.log(dataX)
     yAxis = d3.axisRight()
       .scale(yScale)
       .ticks(5)
@@ -88,7 +87,6 @@ export class Chart2Component implements OnInit {
     if (tickText.select('tspan.tick-year').empty()) {
       tickText.append('tspan').data(dataX.val)
         .text((d,i) => {
-          console.log(i)
           return (((i == 0 || i == dataX.val.length - 1)) ? dataX.year[i] : '');
         }).attr('class', 'tick-year')
         .attr('dy', '1em')
@@ -204,7 +202,7 @@ export class Chart2Component implements OnInit {
   }
 
   toolTip(svg, div, data, color) {
-    svg.selectAll('dot')
+    svg.selectAll('#graphic2 dot')
       .data(data)
       .enter().append('circle')
       .attr('r', 3)
@@ -213,11 +211,11 @@ export class Chart2Component implements OnInit {
       .attr('cy', function(d) { return (d.y); })
       .on('mouseover', function() {
         div .attr('addcss', color)
-        d3.select('.mouse-line')
+        d3.select('#graphic2 .mouse-line')
           .style('opacity', '1');
-        d3.selectAll('.mouse-per-line circle')
+        d3.selectAll('#graphic2 .mouse-per-line circle')
           .style('opacity', '1');
-        d3.selectAll('.mouse-per-line text')
+        d3.selectAll('#graphic2 .mouse-per-line text')
           .style('opacity', '1');
         return div.style('opacity', 1);
       })
@@ -226,7 +224,7 @@ export class Chart2Component implements OnInit {
         const value = (300 - (d.y - 83)) / 300 * 40;
         const number = value.toFixed(2);
         div	.html('2018事' + (d.month) + '者 12 事' + '<br/>'  + number + '%')
-        d3.select('.mouse-line')
+        d3.select('#graphic2 .mouse-line')
           .attr('d', function() {
             let d = 'M' + mouse[0] + ',' + 377;
             d += ' ' + mouse[0] + ',' + 83;
@@ -235,11 +233,11 @@ export class Chart2Component implements OnInit {
         return div.style('top', (d3.event.pageY - 10) + 'px').style('left', (d3.event.pageX + 10) + 'px');
       })
       .on('mouseout', function() {
-        d3.select('.mouse-line')
+        d3.select('#graphic2 .mouse-line')
           .style('opacity', '0');
-        d3.selectAll('.mouse-per-line circle')
+        d3.selectAll('#graphic2 .mouse-per-line circle')
           .style('opacity', '0');
-        d3.selectAll('.mouse-per-line text')
+        d3.selectAll('#graphic2 .mouse-per-line text')
           .style('opacity', '0');
         return div.style('opacity', 0);
       });
