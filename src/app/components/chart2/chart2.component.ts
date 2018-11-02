@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import * as d3 from 'd3';
 @Component({
   selector: 'app-chart2',
@@ -15,9 +15,11 @@ export class Chart2Component implements OnInit {
   ngOnInit() {
     const elmnt = document.getElementById('graphic2');
     this.w = elmnt.offsetWidth;
+    this.w = document.getElementById('graphic2-box').offsetWidth;
     this.h = 450;
     this.dataY = [0, 500, 1000, 1500, 2000];
-    this.dataX = [8, 9, 10, 11, 12];
+    //this.dataX = [8, 9, 10, 11, 12];
+    this.dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
     this.svg = d3.select('#graphic2')
       .append('svg')
       .attr('width', this.w)
@@ -48,10 +50,11 @@ export class Chart2Component implements OnInit {
       .domain([d3.min(dataY), d3.max(dataY)])
       .range([h - 50, 100]);
 
+    console.log(dataX)
     yAxis = d3.axisRight()
       .scale(yScale)
       .ticks(5)
-      .tickFormat(d => d + '自');
+      .tickFormat(d => d + '平');
 
     svg.append('g')
       .attr('class', 'gY')
@@ -61,19 +64,36 @@ export class Chart2Component implements OnInit {
       .call(yAxis);
 
     xScale = d3.scaleLinear()
-      .domain([d3.min(dataX), d3.max(dataX)])
+      .domain([d3.min(dataX.val), d3.max(dataX.val)])
       .range([40, w - 100]);
 
     xAxis = d3.axisBottom()
       .scale(xScale)
       .ticks(5)
-      .tickFormat(d => d + '内');
+      .tickFormat((d, i) => (d + '内' ));
 
     svg.append('g')
       .attr('class', 'gX  ')
       .attr('transform', 'translate(0, 377)')
       .style('font-size', '20px')
       .call(xAxis);
+
+    svg.append('g')
+      .attr('class', 'gX  ')
+      .attr('transform', 'translate(0, 377)')
+      .style('font-size', '20px')
+      .call(xAxis);
+
+    const tickText = d3.selectAll(`#graphic2 svg .gX .tick text`);
+    if (tickText.select('tspan.tick-year').empty()) {
+      tickText.append('tspan').data(dataX.val)
+        .text((d,i) => {
+          console.log(i)
+          return (((i == 0 || i == dataX.val.length - 1)) ? dataX.year[i] : '');
+        }).attr('class', 'tick-year')
+        .attr('dy', '1em')
+        .attr('x',     0);
+    }
 
     ////////////Render x line fuzzy//////////////
     svg.append('line')
@@ -232,7 +252,7 @@ export class Chart2Component implements OnInit {
   }
   btnPreview2() {
     d3.selectAll('#graphic2 svg > *').remove();
-    const dataX = [1, 2, 3, 4, 5];
+    const dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
     const yRed = this.getRandomSetText(230, 280); // Set position text
     const yBlue = this.getRandomSetText(160, 180); // Set position text
     const yGray = this.getRandomSetText(90, 140); // Set position text
@@ -260,11 +280,46 @@ export class Chart2Component implements OnInit {
     this.drawLine(this.svg, fakeRed, this.w, yRed, 'red');
     this.drawLine(this.svg, fakeBlue, this.w, yBlue, 'blue');
     this.drawLine(this.svg, fakeGray, this.w, yGray, 'gray');
-    this.drawLine(this.svg, fakeGreen, this.w, yGray, 'gray');
+    this.drawLine(this.svg, fakeGreen, this.w, yGray, 'green');
   }
   btnNext2() {
     d3.selectAll('#graphic2 svg > *').remove();
-    const dataX = [6, 7, 8, 9, 10];
+    //const dataX = [6, 7, 8, 9, 10];
+    const dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
+    const yRed = this.getRandomSetText(230, 280); // Set position text
+    const yBlue = this.getRandomSetText(160, 180); // Set position text
+    const yGray = this.getRandomSetText(90, 140); // Set position text
+    const fakeRed =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(280, 300)},
+      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
+      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
+      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
+      { 'month': 12, 'x': this.w - 100, 'y': yRed}];
+    const fakeBlue =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(200, 250)},
+      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
+      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
+      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
+      { 'month': 12, 'x': this.w - 100 , 'y': yBlue}];
+    const fakeGray =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(100, 200)},
+      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
+      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
+      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
+      { 'month': 12, 'x': this.w - 100 , 'y': yGray}];
+    const fakeGreen =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(100, 200)},
+      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
+      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
+      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
+      { 'month': 12, 'x': this.w - 100 , 'y': yGray}];
+    this.renderChart(this.w, this.h, this.dataY, dataX, this.svg, fakeRed, fakeBlue, fakeGray, fakeGreen);
+    this.drawLine(this.svg, fakeRed, this.w, yRed, 'red');
+    this.drawLine(this.svg, fakeBlue, this.w, yBlue, 'blue');
+    this.drawLine(this.svg, fakeGray, this.w, yGray, 'gray');
+    this.drawLine(this.svg, fakeGreen, this.w, yGray, 'green');
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    d3.selectAll('#graphic2 svg > *').remove();
+    this.w = document.getElementById('graphic2-box').offsetWidth;
+    const dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
     const yRed = this.getRandomSetText(230, 280); // Set position text
     const yBlue = this.getRandomSetText(160, 180); // Set position text
     const yGray = this.getRandomSetText(90, 140); // Set position text

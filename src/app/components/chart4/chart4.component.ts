@@ -160,14 +160,22 @@ export class Chart4Component implements OnInit {
       .on('mouseout', function(d){  tooltip.style('display', 'none').style('opacity', '0'); });
 
     g.append('g')
-      .attr('class', 'axis')
+      .attr('class', 'axis bottom')
       .attr('transform', 'translate(0,' + height + ')')
-
-      .call(d3.axisBottom(x0).tickFormat((d , i) => {
-        return (d + '回' + (((i == 0 || i == 11)) ? this.data_now[i]['year'] : ''));
+      .call(d3.axisBottom(x0).tickFormat((d , i ) => {
+        return (d + '回' );
       }));
-    // label note
-    //console.log(this.data_now)
+
+    const tickText = d3.selectAll(` .axis.bottom .tick text`);
+    if (tickText.select('tspan.tick-year').empty()) {
+      tickText.append('tspan').data(this.data_now)
+        .text((d,i) => {
+        return (((i == 0 || i == this.data_now.length - 1)) ? this.data_now[i]['year'] : '');
+      }).attr('class', 'tick-year')
+        .attr('dy', '1em')
+        .attr('x',     0);
+    }
+
     g.append('g').selectAll('text')
       .data([this.data_now[0]])
       .enter()
@@ -180,7 +188,7 @@ export class Chart4Component implements OnInit {
         return   3 * x0.bandwidth() / 4;
       })
       .attr('y', function(d) {
-        return  y((d['自社'] > (d['平均'])) ? d['自社'] : d['平均'])  - 14  ;
+        return  y((d['自社'] > (d['平均'])) ? d['自社'] : d['平均'])  - 14 ;
       })
       .attr('font-family', 'sans-serif')
       .attr('font-size', '11px')
@@ -195,7 +203,6 @@ export class Chart4Component implements OnInit {
       })
       .attr('text-anchor', 'middle')
       .attr('x', function(d, i) {
-        console.log(x0(i + 1));
         return  x0.bandwidth() / 4;
       })
       .attr('y', function(d) {
