@@ -1,12 +1,15 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import * as d3 from 'd3';
+import {TranslateService} from 'ng2-translate';
 @Component({
   selector: 'app-chart1',
   templateUrl: './chart1.component.html',
   styleUrls: ['./chart1.component.css']
 })
 export class Chart1Component implements OnInit {
-  constructor() { }
+  private title: string;
+  private des: string;
+  constructor(private translate: TranslateService) { }
   public w;
   public h;
   public dataY;
@@ -41,12 +44,17 @@ export class Chart1Component implements OnInit {
       { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': 170},
       { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': 160},
       { 'month': this.dataX.val[4], 'x': this.w - 100 , 'y': 140}];
-    this.renderChart(this.w, this.h, this.dataY, this.dataX, this.svg, fakeRed, fakeBlue, fakeGray);
+    this.translate.get(['chart-1.title', 'chart-1.des']).subscribe((res: string) => {
+      this.title = res['chart-1.title'];
+      this.des = res['chart-1.des'];
+      this.renderChart(this.w, this.h, this.dataY, this.dataX, this.svg, fakeRed, fakeBlue, fakeGray);
+    });
     this.drawLine(this.svg, fakeRed, this.w, '250', 'red');
     this.drawLine(this.svg, fakeBlue, this.w, '190', 'blue');
     this.drawLine(this.svg, fakeGray, this.w, '140', 'gray');
   }
   renderChart(w, h, dataY, dataX, svg, fakeRed, fakeBlue, fakeGray) {
+    this.dataX = dataX;
     let yScale, yAxis, xScale, xAxis;
     svg.attr('width', parseInt(d3.select('#graphic-box').style('width')));
     yScale = d3.scaleLinear()
@@ -133,13 +141,13 @@ export class Chart1Component implements OnInit {
       .attr('text-anchor', 'middle')
       .style('font-size', '26px')
       .attr('y', 30)
-      .text('アクティブユーザー411人');
+      .text(this.title);
     svg.append('text')
       .attr('x', (w / 2))
       .attr('text-anchor', 'middle')
       .style('font-size', '26px')
       .attr('y', 60)
-      .text('2位／278社中');
+      .text(this.des);
 
     ////////////Add ToolTip and Line when Hover//////////////
     const div = d3.select('body').append('div')
@@ -355,24 +363,24 @@ export class Chart1Component implements OnInit {
     const yBlue = this.getRandomSetText(160, 180); // Set position text
     const yGray = this.getRandomSetText(90, 140); // Set position text
     const fakeRed =  [
-      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(280, 300)},
-      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
-      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
-      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
-      { 'month': dataX.val[4], 'x': this.w - 100, 'y': yRed}];
+      { 'month': this.dataX.val[0], 'x': 40, 'y': this.getRandomInt(280, 300)},
+      { 'month': this.dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
+      { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
+      { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
+      { 'month': this.dataX.val[4], 'x': this.w - 100, 'y': yRed}];
     const fakeBlue =  [
-      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(200, 250)},
-      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
-      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
-      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
-      { 'month': dataX.val[4], 'x': this.w - 100 , 'y': yBlue}];
+      { 'month': this.dataX.val[0], 'x': 40, 'y': this.getRandomInt(200, 250)},
+      { 'month': this.dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
+      { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
+      { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
+      { 'month': this.dataX.val[4], 'x': this.w - 100 , 'y': yBlue}];
     const fakeGray =  [
-      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(100, 200)},
-      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
-      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
-      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
-      { 'month': dataX.val[4], 'x': this.w - 100 , 'y': yGray}];
-    this.renderChart(this.w, this.h, this.dataY, dataX, this.svg, fakeRed, fakeBlue, fakeGray);
+      { 'month': this.dataX.val[0], 'x': 40, 'y': this.getRandomInt(100, 200)},
+      { 'month': this.dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
+      { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
+      { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
+      { 'month': this.dataX.val[4], 'x': this.w - 100 , 'y': yGray}];
+    this.renderChart(this.w, this.h, this.dataY, this.dataX, this.svg, fakeRed, fakeBlue, fakeGray);
     this.drawLine(this.svg, fakeRed, this.w, yRed, 'red');
     this.drawLine(this.svg, fakeBlue, this.w, yBlue, 'blue');
     this.drawLine(this.svg, fakeGray, this.w, yGray, 'gray');

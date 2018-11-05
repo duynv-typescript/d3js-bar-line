@@ -1,18 +1,29 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import * as d3 from 'd3';
+import {TranslateService} from 'ng2-translate';
+import { Http, HttpModule } from '@angular/http';
 @Component({
   selector: 'app-chart3',
   templateUrl: './chart3.component.html',
   styleUrls: ['./chart3.component.css']
 })
 export class Chart3Component implements OnInit {
-  constructor() { }
+  constructor(private translate: TranslateService) {
+    // this language will be used as a fallback when a translation isn't found in the current language
+    translate.setDefaultLang('ja');
+    // the lang to use, if the lang isn't available, it will use the current loader to get them
+    translate.use('ja');
+
+  }
   public w;
   public h;
   public dataY;
   public dataX;
   public svg;
+  public title;
+  public des;
   ngOnInit() {
+
     const elmnt = document.getElementById('graphic3');
     this.w = elmnt.offsetWidth;
     this.w = document.getElementById('graphic3-box').offsetWidth;
@@ -42,14 +53,19 @@ export class Chart3Component implements OnInit {
       { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': 170},
       { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': 160},
       { 'month': this.dataX.val[4], 'x': this.w - 100 , 'y': 140}];
-    this.renderChart(this.w, this.h, this.dataY, this.dataX, this.svg, fakeRed, fakeBlue, fakeGray);
+    this.translate.get(['chart-3.title', 'chart-3.des']).subscribe((res: string) => {
+      this.title = res['chart-3.title'];
+      this.des = res['chart-3.des'];
+      this.renderChart(this.w, this.h, this.dataY, this.dataX, this.svg, fakeRed, fakeBlue, fakeGray);
+    });
     this.drawLine(this.svg, fakeRed, this.w, '250', 'red');
     this.drawLine(this.svg, fakeBlue, this.w, '190', 'blue');
     this.drawLine(this.svg, fakeGray, this.w, '140', 'gray');
   }
 
-  renderChart(w, h, dataY, dataX, svg, fakeRed, fakeBlue, fakeGray) {
+  renderChart(w, h, dataY, dataX, svg, fakeRed, fakeBlue, fakeGray ) {
     let yScale, yAxis, xScale, xAxis;
+
     svg.attr('width', parseInt(d3.select('#graphic3-box').style('width')));
 
     yScale = d3.scaleLinear()
@@ -133,18 +149,20 @@ export class Chart3Component implements OnInit {
       .attr('y2', 377);
 
     ////////////Add Title//////////////
+
     svg.append('text')
       .attr('x', (w / 2))
       .attr('text-anchor', 'middle')
       .style('font-size', '26px')
       .attr('y', 30)
-      .text('アクティブユーザー411人');
+      .text( this.title );
+    console.log(this.title);
     svg.append('text')
       .attr('x', (w / 2))
       .attr('text-anchor', 'middle')
       .style('font-size', '26px')
       .attr('y', 60)
-      .text('2位／278社中');
+      .text(this.des);
 
     ////////////Add ToolTip and Line when Hover//////////////
     const div = d3.select('body').append('div')

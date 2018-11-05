@@ -21,11 +21,13 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
+    "@ngx-translate/core": "^11.0.0",
     "angular-d3-charts": "^5.0.0",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
     "d3": "^5.7.0",
     "d3-ng2-service": "^2.2.0",
+    "ng2-translate": "^5.0.0",
     "ngx-bootstrap": "^3.1.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"

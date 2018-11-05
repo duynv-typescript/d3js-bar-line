@@ -1,5 +1,6 @@
 import {Component, OnInit, enableProdMode, HostListener} from '@angular/core';
 import * as d3 from 'd3';
+import {TranslateService} from 'ng2-translate';
 enableProdMode();
 
 @Component({
@@ -41,10 +42,14 @@ export class Chart4Component implements OnInit {
     {month: '12', 平均: '40', 自社: '90', year: '2019'},
     {month: '1', 平均: '40', 自社: '90', year: '2020'},
   ];
-  constructor() {
+  private valueColum: string;
+  constructor(private translate: TranslateService) {
   }
   ngOnInit() {
-    this.renderChart(this.data_begin);
+    this.translate.get('chart-4.value').subscribe((res: string) => {
+      this.valueColum=res;
+      this.renderChart(this.data_begin);
+    });
   }
   renderChart(data_input) {
     const data = data_input;
@@ -108,13 +113,13 @@ export class Chart4Component implements OnInit {
       .call(yAxis)
       .append('text')
       .attr('transform', 'translate(' + 0 + ', 0)')
-      .attr('x', parseInt(d3.select('.box').style('width')) - 30 - margin.left - margin.right)
+      .attr('x', parseInt(d3.select('.box').style('width'))  - margin.left - margin.right)
       .attr('y', y(y.ticks().pop()) + 0.5 - 10)
       .attr('dy', '0.32em')
       .attr('fill', '#000')
       .attr('font-weight', 'bold')
       .attr('text-anchor', 'start')
-      .text('Giá trị');
+      .text(this.valueColum);
     g.append('g')
       .selectAll('g')
       .data(this.data_now)

@@ -1,13 +1,15 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import * as d3 from 'd3';
-import {getFullYear} from 'ngx-bootstrap';
+import {TranslateService} from 'ng2-translate';
 @Component({
   selector: 'app-chart2',
   templateUrl: './chart2.component.html',
   styleUrls: ['./chart2.component.css']
 })
 export class Chart2Component implements OnInit {
-  constructor() { }
+  private title: string;
+  private des: string;
+  constructor(private translate: TranslateService) { }
   public w;
   public h;
   public dataY;
@@ -49,7 +51,11 @@ export class Chart2Component implements OnInit {
       { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': 155},
       { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': 145},
       { 'month': this.dataX.val[4], 'x': this.w - 100 , 'y': 125}];
-    this.renderChart(this.w, this.h, this.dataY, this.dataX, this.svg, fakeRed, fakeBlue, fakeGray, fakeGreen);
+    this.translate.get(['chart-2.title', 'chart-2.des']).subscribe((res: string) => {
+      this.title = res['chart-2.title'];
+      this.des = res['chart-2.des'];
+      this.renderChart(this.w, this.h, this.dataY, this.dataX, this.svg, fakeRed, fakeBlue, fakeGray, fakeGreen);
+    });
     this.drawLine(this.svg, fakeRed, this.w, '250', 'red');
     this.drawLine(this.svg, fakeBlue, this.w, '190', 'blue');
     this.drawLine(this.svg, fakeGray, this.w, '140', 'gray');
@@ -152,13 +158,13 @@ export class Chart2Component implements OnInit {
       .attr('text-anchor', 'middle')
       .style('font-size', '26px')
       .attr('y', 30)
-      .text('アクティブユーザー411人');
+      .text(this.title);
     svg.append('text')
       .attr('x', (w / 2))
       .attr('text-anchor', 'middle')
       .style('font-size', '26px')
       .attr('y', 60)
-      .text('2位／278社中');
+      .text(this.des);
 
     ////////////Add ToolTip and Line when Hover//////////////
     const div = d3.select('body').append('div')
