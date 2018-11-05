@@ -18,20 +18,29 @@ export class Chart1Component implements OnInit {
     this.w = document.getElementById('graphic-box').offsetWidth;
     this.h = 450;
     this.dataY = [0, 10, 20, 30, 40];
-    this.dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
+    this.dataX = {'val': [8, 9, 10, 11, 12,], 'year': [2014, 2014, 2014, 2014, 2014]};
     this.svg = d3.select('#graphic')
       .append('svg')
       .attr('width', this.w)
       .attr('height', this.h);
-    const fakeRed =  [ { 'month': 8, 'x': 40, 'y': 290},  { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': 280},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': 260}, { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': 270},
-      { 'month': 12, 'x': this.w - 100, 'y': 250}];
-    const fakeBlue =  [ { 'month': 8, 'x': 40, 'y': 280},  { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': 240},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': 220}, { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': 200},
-      { 'month': 12, 'x': this.w - 100 , 'y': 190}];
-    const fakeGray =  [ { 'month': 8, 'x': 40, 'y': 200},  { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': 180},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': 170}, { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': 160},
-      { 'month': 12, 'x': this.w - 100 , 'y': 140}];
+    const fakeRed =  [
+      { 'month': this.dataX.val[0], 'x': 40, 'y': 290},
+      { 'month': this.dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': 280},
+      { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': 260},
+      { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': 270},
+      { 'month': this.dataX.val[4], 'x': this.w - 100, 'y': 250}];
+    const fakeBlue =  [
+      { 'month': this.dataX.val[0], 'x': 40, 'y': 280},
+      { 'month': this.dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': 240},
+      { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': 220},
+      { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': 200},
+      { 'month': this.dataX.val[4], 'x': this.w - 100 , 'y': 190}];
+    const fakeGray =  [
+      { 'month': this.dataX.val[0], 'x': 40, 'y': 200},
+      { 'month': this.dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': 180},
+      { 'month': this.dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': 170},
+      { 'month': this.dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': 160},
+      { 'month': this.dataX.val[4], 'x': this.w - 100 , 'y': 140}];
     this.renderChart(this.w, this.h, this.dataY, this.dataX, this.svg, fakeRed, fakeBlue, fakeGray);
     this.drawLine(this.svg, fakeRed, this.w, '250', 'red');
     this.drawLine(this.svg, fakeBlue, this.w, '190', 'blue');
@@ -55,8 +64,8 @@ export class Chart1Component implements OnInit {
       .attr('text-anchor', 'middle')
       .call(yAxis);
 
-    xScale = d3.scaleLinear()
-      .domain([d3.min(dataX.val), d3.max(dataX.val)])
+    xScale = d3.scaleBand()
+      .domain(dataX.val)
       .range([40, w - 100]);
 
     xAxis = d3.axisBottom()
@@ -245,25 +254,40 @@ export class Chart1Component implements OnInit {
   }
   btnPreview() {
     d3.selectAll('#graphic svg > *').remove();
-    const dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
+    this.w = document.getElementById('graphic3-box').offsetWidth;
+    const dataX = {'val': [], 'year': []};
+    // Fake data
+    let randomDate = ((start, end) => {
+      return new Date(+start + Math.random() * (+end - +start));
+    });
+    let date = randomDate(new Date('2010-01-01'), new Date('2020-01-01'));
+    let count = 5;
+    for (let i = 0; i < count; i++) {
+      dataX.year.push((d3.timeFormat('%Y')(date)));
+      dataX.val.push((d3.timeFormat('%m')(date)));
+      date.setMonth(date.getMonth() + 1);
+    }
     const yRed = this.getRandomSetText(230, 280); // Set position text
     const yBlue = this.getRandomSetText(160, 180); // Set position text
     const yGray = this.getRandomSetText(90, 140); // Set position text
-    const fakeRed =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(280, 300)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
-      { 'month': 12, 'x': this.w - 100, 'y': yRed}];
-    const fakeBlue =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(200, 250)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
-      { 'month': 12, 'x': this.w - 100 , 'y': yBlue}];
-    const fakeGray =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(100, 200)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
-      { 'month': 12, 'x': this.w - 100 , 'y': yGray}];
+    const fakeRed =  [
+      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(280, 300)},
+      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
+      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
+      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
+      { 'month': dataX.val[4], 'x': this.w - 100, 'y': yRed}];
+    const fakeBlue =  [
+      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(200, 250)},
+      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
+      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
+      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
+      { 'month': dataX.val[4], 'x': this.w - 100 , 'y': yBlue}];
+    const fakeGray =  [
+      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(100, 200)},
+      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
+      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
+      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
+      { 'month': dataX.val[4], 'x': this.w - 100 , 'y': yGray}];
     this.renderChart(this.w, this.h, this.dataY, dataX, this.svg, fakeRed, fakeBlue, fakeGray);
     this.drawLine(this.svg, fakeRed, this.w, yRed, 'red');
     this.drawLine(this.svg, fakeBlue, this.w, yBlue, 'blue');
@@ -271,25 +295,40 @@ export class Chart1Component implements OnInit {
   }
   btnNext() {
     d3.selectAll('#graphic svg > *').remove();
-    const dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
+    this.w = document.getElementById('graphic3-box').offsetWidth;
+    const dataX = {'val': [], 'year': []};
+    // Fake data
+    let randomDate = ((start, end) => {
+      return new Date(+start + Math.random() * (+end - +start));
+    });
+    let date = randomDate(new Date('2010-01-01'), new Date('2020-01-01'));
+    let count = 5;
+    for (let i = 0; i < count; i++) {
+      dataX.year.push((d3.timeFormat('%Y')(date)));
+      dataX.val.push((d3.timeFormat('%m')(date)));
+      date.setMonth(date.getMonth() + 1);
+    }
     const yRed = this.getRandomSetText(230, 280); // Set position text
     const yBlue = this.getRandomSetText(160, 180); // Set position text
     const yGray = this.getRandomSetText(90, 140); // Set position text
-    const fakeRed =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(280, 300)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
-      { 'month': 12, 'x': this.w - 100, 'y': yRed}];
-    const fakeBlue =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(200, 250)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
-      { 'month': 12, 'x': this.w - 100 , 'y': yBlue}];
-    const fakeGray =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(100, 200)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
-      { 'month': 12, 'x': this.w - 100 , 'y': yGray}];
+    const fakeRed =  [
+      { 'month':  dataX.val[0], 'x': 40, 'y': this.getRandomInt(280, 300)},
+      { 'month':  dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
+      { 'month':  dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
+      { 'month':  dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
+      { 'month':  dataX.val[4], 'x': this.w - 100, 'y': yRed}];
+    const fakeBlue =  [
+      { 'month':  dataX.val[0], 'x': 40, 'y': this.getRandomInt(200, 250)},
+      { 'month':  dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
+      { 'month':  dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
+      { 'month':  dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
+      { 'month':  dataX.val[4], 'x': this.w - 100 , 'y': yBlue}];
+    const fakeGray =  [
+      { 'month':  dataX.val[0], 'x': 40, 'y': this.getRandomInt(100, 200)},
+      { 'month':  dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
+      { 'month':  dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
+      { 'month':  dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
+      { 'month':  dataX.val[4], 'x': this.w - 100 , 'y': yGray}];
     this.renderChart(this.w, this.h, this.dataY, dataX, this.svg, fakeRed, fakeBlue, fakeGray);
     this.drawLine(this.svg, fakeRed, this.w, yRed, 'red');
     this.drawLine(this.svg, fakeBlue, this.w, yBlue, 'blue');
@@ -299,25 +338,40 @@ export class Chart1Component implements OnInit {
   onResize(event) {
     d3.selectAll('#graphic svg > *').remove();
     this.w = document.getElementById('graphic-box').offsetWidth;
-    const dataX = {'val': [8, 9, 10, 11, 12, 1], 'year': [2014, 2014, 2014, 2014, 2014, 2015]};
+    this.w = document.getElementById('graphic3-box').offsetWidth;
+    const dataX = {'val': [], 'year': []};
+    // Fake data
+    let randomDate = ((start, end) => {
+      return new Date(+start + Math.random() * (+end - +start));
+    });
+    let date = randomDate(new Date('2010-01-01'), new Date('2020-01-01'));
+    let count = 5;
+    for (let i = 0; i < count; i++) {
+      dataX.year.push((d3.timeFormat('%Y')(date)));
+      dataX.val.push((d3.timeFormat('%m')(date)));
+      date.setMonth(date.getMonth() + 1);
+    }
     const yRed = this.getRandomSetText(230, 280); // Set position text
     const yBlue = this.getRandomSetText(160, 180); // Set position text
     const yGray = this.getRandomSetText(90, 140); // Set position text
-    const fakeRed =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(280, 300)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
-      { 'month': 12, 'x': this.w - 100, 'y': yRed}];
-    const fakeBlue =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(200, 250)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
-      { 'month': 12, 'x': this.w - 100 , 'y': yBlue}];
-    const fakeGray =  [ { 'month': 8, 'x': 40, 'y': this.getRandomInt(100, 200)},
-      { 'month': 9, 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
-      { 'month': 10, 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
-      { 'month': 11, 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
-      { 'month': 12, 'x': this.w - 100 , 'y': yGray}];
+    const fakeRed =  [
+      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(280, 300)},
+      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(270, 290)},
+      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(260, 270)},
+      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(240, 260)},
+      { 'month': dataX.val[4], 'x': this.w - 100, 'y': yRed}];
+    const fakeBlue =  [
+      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(200, 250)},
+      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(180, 230)},
+      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(190, 210)},
+      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(180, 190)},
+      { 'month': dataX.val[4], 'x': this.w - 100 , 'y': yBlue}];
+    const fakeGray =  [
+      { 'month': dataX.val[0], 'x': 40, 'y': this.getRandomInt(100, 200)},
+      { 'month': dataX.val[1], 'x': (this.w - 140) / 4 + 40, 'y': this.getRandomInt(100, 170)},
+      { 'month': dataX.val[2], 'x': (this.w - 140) / 4 * 2 + 40, 'y': this.getRandomInt(100, 150)},
+      { 'month': dataX.val[3], 'x': (this.w - 140) / 4 * 3 + 40, 'y': this.getRandomInt(100, 140)},
+      { 'month': dataX.val[4], 'x': this.w - 100 , 'y': yGray}];
     this.renderChart(this.w, this.h, this.dataY, dataX, this.svg, fakeRed, fakeBlue, fakeGray);
     this.drawLine(this.svg, fakeRed, this.w, yRed, 'red');
     this.drawLine(this.svg, fakeBlue, this.w, yBlue, 'blue');
