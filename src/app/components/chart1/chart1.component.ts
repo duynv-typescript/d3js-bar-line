@@ -18,7 +18,7 @@ export class Chart1Component implements OnInit {
     this.w = document.getElementById('graphic-box').offsetWidth;
     this.h = 450;
     this.dataY = [0, 10, 20, 30, 40];
-    this.dataX = {'val': [8, 9, 10, 11, 12,], 'year': [2014, 2014, 2014, 2014, 2014]};
+    this.dataX = {'val': [8, 9, 10, 11, 12], 'year': [2014, 2014, 2014, 2014, 2014]};
     this.svg = d3.select('#graphic')
       .append('svg')
       .attr('width', this.w)
@@ -48,6 +48,7 @@ export class Chart1Component implements OnInit {
   }
   renderChart(w, h, dataY, dataX, svg, fakeRed, fakeBlue, fakeGray) {
     let yScale, yAxis, xScale, xAxis;
+    svg.attr('width', parseInt(d3.select('#graphic-box').style('width')));
     yScale = d3.scaleLinear()
       .domain([d3.min(dataY), d3.max(dataY)])
       .range([h - 50, 100]);
@@ -337,7 +338,6 @@ export class Chart1Component implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     d3.selectAll('#graphic svg > *').remove();
-    this.w = document.getElementById('graphic-box').offsetWidth;
     this.w = document.getElementById('graphic3-box').offsetWidth;
     const dataX = {'val': [], 'year': []};
     // Fake data

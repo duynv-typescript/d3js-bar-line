@@ -58,6 +58,7 @@ export class Chart2Component implements OnInit {
 
   renderChart(w, h, dataY, dataX, svg, fakeRed, fakeBlue, fakeGray, fakeGreen) {
     let yScale, yAxis, xScale, xAxis;
+    svg.attr('width', parseInt(d3.select('#graphic2-box').style('width')));
 
     yScale = d3.scaleLinear()
       .domain([d3.min(dataY), d3.max(dataY)])
@@ -264,6 +265,8 @@ export class Chart2Component implements OnInit {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
   btnPreview2() {
+    this.w = document.getElementById('graphic-box').offsetWidth;
+
     d3.selectAll('#graphic2 svg > *').remove();
     const dataX = {'val': [], 'year': []};
     // Fake data
@@ -307,6 +310,8 @@ export class Chart2Component implements OnInit {
     this.drawLine(this.svg, fakeGreen, this.w, yGray, 'green');
   }
   btnNext2() {
+    this.w = document.getElementById('graphic-box').offsetWidth;
+
 
     const dataX = {'val': [], 'year': []};
     // Fake data
