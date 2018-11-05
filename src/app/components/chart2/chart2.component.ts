@@ -402,6 +402,6 @@ export class Chart2Component implements OnInit {
     this.drawLine(this.svg, fakeRed, this.w, yRed, 'red');
     this.drawLine(this.svg, fakeBlue, this.w, yBlue, 'blue');
     this.drawLine(this.svg, fakeGray, this.w, yGray, 'gray');
-    this.drawLine(this.svg, fakeGreen, this.w, yGray, 'gray');
+    this.drawLine(this.svg, fakeGreen, this.w, yGray, 'Green');
   }
 }
